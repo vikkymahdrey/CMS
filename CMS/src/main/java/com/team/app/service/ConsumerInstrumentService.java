@@ -42,6 +42,7 @@ public interface ConsumerInstrumentService {
 	public LoraFrame getNamingPacket1(String deviceId, String devEUI)throws Exception;
 	public void deleteDevEUI(String appId, String devEUI)throws Exception;
 	public List<LoraFrame> getDevEUIByAppId(String appId)throws Exception;
+	public LoraFrame getFrameByDeviceEUI(String devEUI)throws Exception;
 	
 	
 	

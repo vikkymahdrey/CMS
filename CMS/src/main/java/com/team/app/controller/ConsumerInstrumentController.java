@@ -2467,6 +2467,260 @@ public class ConsumerInstrumentController {
 	}
 	
 	
+	@RequestMapping(value= {"/getApp"}, method=RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getAppHandler() throws Exception  {
+		logger.debug("/*INside getAppByOrgId */");
+		
+		ResponseEntity<String> responseEntity = null;
+		try{
+			
+			String jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJsb3JhLWFwcC1zZXJ2ZXIiLCJhdWQiOiJsb3JhLWFwcC1zZXJ2ZXIiLCJuYmYiOjE1MDk5NjE1NzIsInN1YiI6InVzZXIiLCJ1c2VybmFtZSI6ImFkbWluIn0.NDZGFGPDQNs7AgmGRzQk1WL5Y1tLjyRbw-n_TwHPZsY";
+			
+			   String url="https://139.59.14.31:8080/api/applications?limit=100";
+				logger.debug("URLConn",url);
+				URL obj1 = new URL(url);
+				HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
+				con.setDoOutput(true);
+				con.setRequestMethod("GET");
+				con.setRequestProperty("accept", "application/json");
+				con.setRequestProperty("Content-Type", "application/json");
+				con.setRequestProperty("Grpc-Metadata-Authorization",jwt);
+				
+				    
+				int responseCode = con.getResponseCode();
+					logger.debug("POST Response Code :: " + responseCode);
+					
+				
+						    				
+				if(responseCode == HttpURLConnection.HTTP_OK) {
+					logger.debug("Token valid,POST Response with 200");
+					
+					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+					String inputLine;
+					StringBuffer response = new StringBuffer();
+
+					while ((inputLine = in.readLine()) != null) {
+						response.append(inputLine);
+					}
+					
+					in.close();
+					
+					JSONObject json=null;
+						json=new JSONObject();
+					json=(JSONObject)new JSONParser().parse(response.toString());
+				
+					JSONArray arr=(JSONArray) json.get("result");
+					
+									
+					JSONArray jsonArr=null;
+						jsonArr=new JSONArray();
+					
+						JSONObject result=null;
+							result=new JSONObject();
+					
+					if(arr!=null && arr.size()>0){
+						logger.debug("Inside Array not null");
+							
+						 for (int i = 0; i < arr.size(); i++) {
+							 JSONObject jsonObj = (JSONObject) arr.get(i);						 							
+							
+							if(jsonObj.get("id").toString().equalsIgnoreCase("19")){
+								logger.debug("organizationID matching ..");
+								logger.debug("Application name ..",jsonObj.get("name").toString());
+								logger.debug("Application id ..",jsonObj.get("id").toString());
+								JSONObject js=null;
+									js=new JSONObject();
+									js.put("appId", jsonObj.get("id").toString());
+									js.put("appName", jsonObj.get("name").toString());
+									
+								jsonArr.add(js);	
+								
+								break;
+												
+							}
+						 }
+			        }
+					
+					result.put("apps", jsonArr);
+					String resp = JsonUtil.objToJson(result);
+					responseEntity = new ResponseEntity<String>(resp,HttpStatus.OK);
+					
+					
+				}else{
+					responseEntity = new ResponseEntity<String>(HttpStatus.NOT_ACCEPTABLE);
+				}
+			
+				
+			
+		}catch(Exception e){
+			logger.error("Error in getAppByOrgId",e);
+			responseEntity = new ResponseEntity<String>(HttpStatus.METHOD_NOT_ALLOWED);
+		}
+			
+			
+		return responseEntity;
+
+	}
+	
+	
+	@RequestMapping(value= {"/getDeviceByAppId"}, method=RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getAppByOrgIdHandler(@RequestBody String received) throws Exception  {
+		logger.debug("/*INside getDeviceByAppId */");
+		
+		
+		ResponseEntity<String> responseEntity = null;
+	
+		JSONObject obj=null;
+		try{		
+				obj=new JSONObject();
+				obj=(JSONObject)new JSONParser().parse(received);
+		}catch(Exception e){
+			return new ResponseEntity<String>("Empty received body /getDeviceByAppId", HttpStatus.BAD_REQUEST);
+		}
+		
+		
+		try{
+			
+			String jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJsb3JhLWFwcC1zZXJ2ZXIiLCJhdWQiOiJsb3JhLWFwcC1zZXJ2ZXIiLCJuYmYiOjE1MDk5NjE1NzIsInN1YiI6InVzZXIiLCJ1c2VybmFtZSI6ImFkbWluIn0.NDZGFGPDQNs7AgmGRzQk1WL5Y1tLjyRbw-n_TwHPZsY";
+			if(obj.get("appId").toString()!=null && !obj.get("appId").toString().isEmpty()){
+			   String url="https://139.59.14.31:8080/api/applications/"+obj.get("appId").toString().trim()+"/nodes?limit=100";
+				logger.debug("URLConn",url);
+				URL obj1 = new URL(url);
+				HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
+				con.setDoOutput(true);
+				con.setRequestMethod("GET");
+				con.setRequestProperty("accept", "application/json");
+				con.setRequestProperty("Content-Type", "application/json");
+				con.setRequestProperty("Grpc-Metadata-Authorization",jwt);
+				
+				    
+				int responseCode = con.getResponseCode();
+					logger.debug("POST Response Code :: " + responseCode);
+					
+				
+						    				
+				if(responseCode == HttpURLConnection.HTTP_OK) {
+					logger.debug("Token valid,POST Response with 200");
+					
+					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+					String inputLine;
+					StringBuffer response = new StringBuffer();
+
+					while ((inputLine = in.readLine()) != null) {
+						response.append(inputLine);
+					}
+					
+					in.close();
+					
+					JSONObject json=null;
+						json=new JSONObject();
+					json=(JSONObject)new JSONParser().parse(response.toString());
+				
+					JSONArray arr=(JSONArray) json.get("result");
+					
+					JSONArray jsonArr=null;
+						jsonArr=new JSONArray();
+				
+					JSONObject result=null;
+						result=new JSONObject();
+					
+										
+					if(arr!=null && arr.size()>0){
+						logger.debug("Inside Array not null");
+							
+						 for (int i = 0; i < arr.size(); i++) {
+							 JSONObject jsonObj = (JSONObject) arr.get(i);
+							 if(jsonObj.get("applicationID").toString().equals("19")){
+							 	logger.debug("DevEUI name ..",jsonObj.get("devEUI").toString());
+							 	JSONObject js=null;
+							 		js=new JSONObject();
+							 		js.put("devEUI", jsonObj.get("devEUI").toString());
+							 		js.put("name", jsonObj.get("name").toString());
+													
+								jsonArr.add(js);						
+							 }
+						  }
+			        }
+					
+					result.put("devices", jsonArr);
+					String resp = JsonUtil.objToJson(result);
+					responseEntity = new ResponseEntity<String>(resp,HttpStatus.OK);
+				}else{
+					responseEntity = new ResponseEntity<String>(HttpStatus.NOT_ACCEPTABLE);
+				}
+			}else{
+				responseEntity = new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+			}
+			
+		}catch(Exception e){
+			logger.error("Error in getDeviceByAppId",e);
+			responseEntity = new ResponseEntity<String>(HttpStatus.METHOD_NOT_ALLOWED);
+		}
+			
+			
+		return responseEntity;
+
+	}
+	
+	
+	@RequestMapping(value= {"/getCattlesByEUI"}, method=RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getCattlesByEUIHanlder(@RequestBody String received) throws Exception  {
+		logger.debug("/*INside getCattlesByEUI */");
+		
+		
+		ResponseEntity<String> responseEntity = null;
+		
+	
+		JSONObject obj=null;
+		try{		
+				obj=new JSONObject();
+				obj=(JSONObject)new JSONParser().parse(received);
+		}catch(Exception e){
+			return new ResponseEntity<String>("Empty received body /getCattlesByEUI", HttpStatus.BAD_REQUEST);
+		}
+		
+		
+		try{
+			
+			
+			if(obj.get("devEUI").toString()!=null && !obj.get("devEUI").toString().isEmpty()){
+			  
+					JSONArray jsonArr=null;
+						jsonArr=new JSONArray();
+				
+					JSONObject result=null;
+						result=new JSONObject();
+						
+						LoraFrame frm=consumerInstrumentServiceImpl.getFrameByDeviceEUI(obj.get("devEUI").toString().trim());
+					if(frm!=null){
+						JSONObject js=null;
+							js=new JSONObject();
+							js.put("cattle1", frm.getLed1());
+							js.put("cattle2", frm.getLed2());
+							js.put("cattle3", frm.getLed3());
+							js.put("cattle4", frm.getLed4());
+							jsonArr.add(js);
+					}
+					
+					result.put("cattles", jsonArr);
+					String resp = JsonUtil.objToJson(result);
+					responseEntity = new ResponseEntity<String>(resp,HttpStatus.OK);
+				
+			}else{
+				responseEntity = new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+			}
+			
+		}catch(Exception e){
+			logger.error("Error in getCattlesByEUI",e);
+			responseEntity = new ResponseEntity<String>(HttpStatus.METHOD_NOT_ALLOWED);
+		}
+			
+			
+		return responseEntity;
+
+	}
+	
+	
 	
 	
 	

@@ -83,6 +83,9 @@ public interface FrameDao extends JpaRepository<LoraFrame, Serializable> {
 	
 	@Query(value="Select f from LoraFrame f where f.devEUI=:devEUI order by f.id desc")
 	List<LoraFrame> getFrameByDevEUI(@Param("devEUI") String devEUI);
+
+	@Query(value="Select f.* from lora_frames f where f.devEUI=?1 order by f.id desc limit 1",nativeQuery = true)
+	LoraFrame getFrameByDeviceEUI(@Param("devEUI") String devEUI);
 	
 	
 

@@ -271,6 +271,13 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 
 
 
+	
+	public LoraFrame getFrameByDeviceEUI(String devEUI) throws Exception {
+		return frameDao.getFrameByDeviceEUI(devEUI);
+	}
+
+
+
 
 
 	
