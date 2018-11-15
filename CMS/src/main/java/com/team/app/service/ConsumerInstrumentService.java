@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.team.app.domain.JwtToken;
 import com.team.app.domain.LoraFrame;
+import com.team.app.domain.TblDevLatlng;
 import com.team.app.domain.TblToshibaKeyConfig;
 import com.team.app.domain.TblUserInfo;
 import com.team.app.domain.User;
@@ -43,6 +44,7 @@ public interface ConsumerInstrumentService {
 	public void deleteDevEUI(String appId, String devEUI)throws Exception;
 	public List<LoraFrame> getDevEUIByAppId(String appId)throws Exception;
 	public LoraFrame getFrameByDeviceEUI(String devEUI)throws Exception;
+	public TblDevLatlng getDeviceLatLng(String devEUI)throws Exception;
 	
 	
 	

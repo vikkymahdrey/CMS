@@ -35,7 +35,7 @@ public class AppConstants {
 	public static final String SUBJECT_NON_SECURE = "MOBILE_NON_SECURE";
 	public static final String TOKEN_LOGN_ID = "MOBILE_LOGIN";
 	
-	public static final String Organisation = "Unizen";
+	public static final String Organisation = "CMS";
 	
 	
 }

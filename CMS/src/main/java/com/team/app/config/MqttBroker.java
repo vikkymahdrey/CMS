@@ -39,6 +39,8 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 	
 	MqttMessage message;
 	
+	
+	
 	 public void doDemo(String appId, String devId)  {
 	    try {
 	    	logger.debug("/ INside MQTT Broker"+devId);	
@@ -64,51 +66,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 	
 	public void doDemo() {
 	  
-	  try {
-	    	logger.debug("/ INside MQTT Broker 4786e6ed00490051 ");
-	    	MqttConnectOptions connOpts = new MqttConnectOptions();
-	        connOpts.setUserName("loragw");
-	        connOpts.setPassword("loragw".toCharArray());
-	        connOpts.setCleanSession(true);
-	        client = new MqttClient("tcp://139.59.14.31:1883", MqttClient.generateClientId());
-	        
-	        client.connect(connOpts);
-	        client.setCallback(this);
-	        client.subscribe("application/2/node/4786e6ed00490051/rx");
-	        MqttMessage message = new MqttMessage();
-	        message.setPayload("sending......."
-	                .getBytes());
-	        client.publish("application/2/node/4786e6ed00490051/tx", message);
-	        System.out.println("Message printing here "+message);
-	        //System.exit(0);
-	    } catch (MqttException e) {
-	        e.printStackTrace();
-	    }
-	  
-	  try {
-	    	logger.debug("/ INside MQTT Broker 1841223671138130 ");
-	    	MqttConnectOptions connOpts = new MqttConnectOptions();
-	        connOpts.setUserName("loragw");
-	        connOpts.setPassword("loragw".toCharArray());
-	        connOpts.setCleanSession(true);
-	        client = new MqttClient("tcp://139.59.14.31:1883", MqttClient.generateClientId());
-	        
-	        client.connect(connOpts);
-	        client.setCallback(this);
-	        client.subscribe("application/2/node/1841223671138130/rx");
-	        MqttMessage message = new MqttMessage();
-	        message.setPayload("sending......."
-	                .getBytes());
-	        client.publish("application/2/node/1841223671138130/tx", message);
-	        System.out.println("Message printing here "+message);
-	        //System.exit(0);
-	    } catch (MqttException e) {
-	        e.printStackTrace();
-	    }
-	  
-	  
-	        
-	
+	 
 	}
 
 	

@@ -27,6 +27,7 @@
 		<class>com.team.app.domain.OrganizationUser</class>
 		<class>com.team.app.domain.User</class>
 		<class>com.team.app.domain.LoraFrame</class>
+		<class>com.team.app.domain.TblDevLatlng</class>
 		
 
 		<properties>

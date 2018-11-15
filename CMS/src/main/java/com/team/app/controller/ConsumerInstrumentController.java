@@ -29,6 +29,7 @@ import com.team.app.config.MqttIntrf;
 import com.team.app.constant.AppConstants;
 import com.team.app.domain.JwtToken;
 import com.team.app.domain.LoraFrame;
+import com.team.app.domain.TblDevLatlng;
 import com.team.app.domain.User;
 import com.team.app.dto.ResponseDto;
 import com.team.app.dto.Status;
@@ -1109,6 +1110,9 @@ public class ConsumerInstrumentController {
 		}
 		return responseEntity;
 	}
+	
+	
+	
 	
 	
 	
@@ -2524,7 +2528,10 @@ public class ConsumerInstrumentController {
 						 for (int i = 0; i < arr.size(); i++) {
 							 JSONObject jsonObj = (JSONObject) arr.get(i);						 							
 							
-							if(jsonObj.get("id").toString().equalsIgnoreCase("19")){
+							if(jsonObj.get("id").toString().equalsIgnoreCase("19") || 
+									jsonObj.get("id").toString().equalsIgnoreCase("20") ||
+										jsonObj.get("id").toString().equalsIgnoreCase("21") ||
+											jsonObj.get("id").toString().equalsIgnoreCase("22")){
 								logger.debug("organizationID matching ..");
 								logger.debug("Application name ..",jsonObj.get("name").toString());
 								logger.debug("Application id ..",jsonObj.get("id").toString());
@@ -2535,7 +2542,7 @@ public class ConsumerInstrumentController {
 									
 								jsonArr.add(js);	
 								
-								break;
+								//break;
 												
 							}
 						 }
@@ -2630,7 +2637,7 @@ public class ConsumerInstrumentController {
 							
 						 for (int i = 0; i < arr.size(); i++) {
 							 JSONObject jsonObj = (JSONObject) arr.get(i);
-							 if(jsonObj.get("applicationID").toString().equals("19")){
+							 //if(jsonObj.get("applicationID").toString().equals("19")){
 							 	logger.debug("DevEUI name ..",jsonObj.get("devEUI").toString());
 							 	JSONObject js=null;
 							 		js=new JSONObject();
@@ -2638,7 +2645,7 @@ public class ConsumerInstrumentController {
 							 		js.put("name", jsonObj.get("name").toString());
 													
 								jsonArr.add(js);						
-							 }
+							 //}
 						  }
 			        }
 					
@@ -2712,6 +2719,74 @@ public class ConsumerInstrumentController {
 			
 		}catch(Exception e){
 			logger.error("Error in getCattlesByEUI",e);
+			responseEntity = new ResponseEntity<String>(HttpStatus.METHOD_NOT_ALLOWED);
+		}
+			
+			
+		return responseEntity;
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value= {"/getBleLoraLatLng"}, method=RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getBleLoraLatLngHandler(@RequestBody String received) throws Exception  {
+		logger.debug("/*INside getBleLoraLatLng */");
+		
+		
+		ResponseEntity<String> responseEntity = null;
+		
+	
+		JSONObject obj=null;
+		try{		
+				obj=new JSONObject();
+				obj=(JSONObject)new JSONParser().parse(received);
+		}catch(Exception e){
+			return new ResponseEntity<String>("Empty received body /getBleLoraLatLng", HttpStatus.NOT_FOUND);
+		}
+		
+		
+		try{
+			
+			
+			if(obj.get("appId").toString()!=null && !obj.get("appId").toString().isEmpty()){
+			  List<LoraFrame> frms=consumerInstrumentServiceImpl.getDevEUIByAppId(obj.get("appId").toString());
+			  if(frms!=null && !frms.isEmpty()){
+					JSONArray jsonArr=null;
+						jsonArr=new JSONArray();
+				  	JSONObject res=null;
+				  	    res=new JSONObject();
+					for(LoraFrame f : frms){
+						  JSONObject json=null;	
+						  	json=new JSONObject();						
+							TblDevLatlng latLng=consumerInstrumentServiceImpl.getDeviceLatLng(f.getDevEUI().trim());
+							if(latLng!=null){						
+								json.put("lat", latLng.getLat());
+								json.put("lng", latLng.getLng());
+								json.put("devEUI", f.getDevEUI());
+								json.put("nodeName", f.getNodeName());
+								
+							}else{
+								json.put("lat", "");
+								json.put("lng","");
+								json.put("devEUI", f.getDevEUI());
+								json.put("nodeName", f.getNodeName());
+							}	
+							jsonArr.add(json);
+					}
+					
+					res.put("devices", jsonArr);
+					String resp = JsonUtil.objToJson(res);
+					responseEntity = new ResponseEntity<String>(resp,HttpStatus.OK);
+				
+				}else{
+					responseEntity = new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+				}
+			}else{
+				responseEntity = new ResponseEntity<String>(HttpStatus.LOCKED);
+			}
+			
+		}catch(Exception e){
+			logger.error("Error in getBleLoraLatLng",e);
 			responseEntity = new ResponseEntity<String>(HttpStatus.METHOD_NOT_ALLOWED);
 		}
 			

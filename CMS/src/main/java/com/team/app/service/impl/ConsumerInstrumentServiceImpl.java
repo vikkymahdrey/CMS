@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.team.app.constant.AppConstants;
+import com.team.app.dao.DeviceLatLngDao;
 import com.team.app.dao.FrameDao;
 import com.team.app.dao.JwtTokenDao;
 import com.team.app.dao.ToshibaKeyConfigDao;
@@ -17,6 +18,7 @@ import com.team.app.dao.UserDao;
 import com.team.app.dao.UserInfoDao;
 import com.team.app.domain.JwtToken;
 import com.team.app.domain.LoraFrame;
+import com.team.app.domain.TblDevLatlng;
 import com.team.app.domain.TblToshibaKeyConfig;
 import com.team.app.domain.TblUserInfo;
 import com.team.app.domain.User;
@@ -51,6 +53,9 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 	
 	@Autowired
 	private FrameDao frameDao;
+	
+	@Autowired
+	private DeviceLatLngDao deviceLatLngDao;
 	
 	
 	
@@ -274,6 +279,13 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 	
 	public LoraFrame getFrameByDeviceEUI(String devEUI) throws Exception {
 		return frameDao.getFrameByDeviceEUI(devEUI);
+	}
+
+
+
+	
+	public TblDevLatlng getDeviceLatLng(String devEUI) throws Exception {
+		return deviceLatLngDao.getDeviceLatLng(devEUI);
 	}
 
 
